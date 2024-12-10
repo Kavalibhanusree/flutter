@@ -1,0 +1,182 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(Covid19App());
+}
+
+class Covid19App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'COVID-19 Statistics',
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+      ),
+      home: HomePage(),
+      routes: {
+        '/global': (context) => GlobalStatsPage(),
+        '/country': (context) => CountryStatsPage(),
+        '/info': (context) => InfoPage(),
+      },
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('COVID-19 Statistics'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Welcome to the COVID-19 Tracker',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/global');
+              },
+              child: Text('View Global Stats'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/country');
+              },
+              child: Text('View Country Stats'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/info');
+              },
+              child: Text('COVID-19 Info'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class GlobalStatsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Placeholder statistics
+    final Map<String, int> globalStats = {
+      'Total Cases': 50000000,
+      'Total Deaths': 1000000,
+      'Total Recovered': 45000000,
+    };
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Global Statistics'),
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(16.0),
+        children: globalStats.entries.map((entry) {
+          return Card(
+            child: ListTile(
+              title: Text(entry.key),
+              trailing: Text(entry.value.toString(),
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class CountryStatsPage extends StatelessWidget {
+  final List<String> countries = ['USA', 'India', 'Brazil', 'UK', 'Russia'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Country Statistics'),
+      ),
+      body: ListView.builder(
+        itemCount: countries.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: ListTile(
+              title: Text(countries[index]),
+              subtitle: Text('Tap for details'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CountryDetailsPage(
+                      countryName: countries[index],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class CountryDetailsPage extends StatelessWidget {
+  final String countryName;
+
+  CountryDetailsPage({required this.countryName});
+
+  @override
+  Widget build(BuildContext context) {
+    // Placeholder country-specific stats
+    final Map<String, int> countryStats = {
+      'Total Cases': 1000000,
+      'Total Deaths': 50000,
+      'Total Recovered': 950000,
+    };
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('$countryName Statistics'),
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(16.0),
+        children: countryStats.entries.map((entry) {
+          return Card(
+            child: ListTile(
+              title: Text(entry.key),
+              trailing: Text(entry.value.toString(),
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class InfoPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('COVID-19 Info'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          'COVID-19 is a disease caused by the SARS-CoV-2 virus. Prevent the spread by wearing masks, maintaining social distance, and getting vaccinated.',
+          style: TextStyle(fontSize: 18),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
